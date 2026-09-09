@@ -69,7 +69,7 @@ export default function PlayerDetails() {
           <span className={`badge ${player.active ? 'badge-success' : 'badge-danger'}`}>{player.active ? 'Active' : 'Inactive'}</span>
         </div>
         <div className="card-body">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
               <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-secondary)', marginBottom: 4 }}>Created</div>
               <div style={{ fontSize: 14, fontWeight: 500 }}>{formatDateTime(player.createdAt)}</div>

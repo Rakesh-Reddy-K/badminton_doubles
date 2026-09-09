@@ -42,7 +42,7 @@ export default function PairStatistics() {
                 <span className="badge badge-success">{ps.winPercentage}%</span>
               </div>
               <div className="card-body">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, textAlign: 'center' }}>
+                <div className="pair-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, textAlign: 'center' }}>
                   <div>
                     <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Matches</div>
                     <div style={{ fontSize: 22, fontWeight: 800 }}>{ps.matchesPlayed}</div>

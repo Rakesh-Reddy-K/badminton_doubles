@@ -98,6 +98,29 @@ function App() {
           <Route path="/pairs" element={<PairStatistics />} />
         </Routes>
       </main>
+
+      {/* Bottom navigation bar — visible only on mobile */}
+      <nav className="bottom-nav">
+        <NavLink to="/" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`} end>
+          <span className="bottom-nav-icon">📊</span>
+          <span className="bottom-nav-label">Home</span>
+        </NavLink>
+        <NavLink to="/players" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+          <span className="bottom-nav-icon">👥</span>
+          <span className="bottom-nav-label">Players</span>
+        </NavLink>
+        <NavLink to="/matches/new" className={({ isActive }) => `bottom-nav-item bottom-nav-center ${isActive ? 'active' : ''}`}>
+          <span className="bottom-nav-fab">➕</span>
+        </NavLink>
+        <NavLink to="/matches" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+          <span className="bottom-nav-icon">📋</span>
+          <span className="bottom-nav-label">Matches</span>
+        </NavLink>
+        <NavLink to="/rankings" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+          <span className="bottom-nav-icon">🏆</span>
+          <span className="bottom-nav-label">Rankings</span>
+        </NavLink>
+      </nav>
     </div>
   );
 }

@@ -66,7 +66,7 @@ export default function MatchDetails() {
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: 12, marginTop: 24, justifyContent: 'center' }}>
+      <div className="match-detail-actions" style={{ display: 'flex', gap: 12, marginTop: 24, justifyContent: 'center' }}>
         <button className="btn btn-outline" onClick={() => navigate('/matches')}>← Back to History</button>
         <button className="btn btn-danger" onClick={() => setShowDelete(true)}>Delete Match</button>
       </div>
