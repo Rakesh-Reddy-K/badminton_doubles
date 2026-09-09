@@ -53,7 +53,7 @@ html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoot
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.82) 50%, rgba(15, 23, 42, 0.90) 100%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.35) 50%, rgba(15, 23, 42, 0.55) 100%),
     url('./assets/bg-badminton.png') center/cover no-repeat fixed;
   color: var(--text);
   line-height: 1.6;
@@ -69,13 +69,13 @@ a:hover { color: var(--accent); }
 .sidebar {
   position: fixed; top: 0; left: 0; bottom: 0;
   width: var(--sidebar-width);
-  background: rgba(17, 24, 39, 0.92);
-  border-right: 1px solid var(--border);
+  background: rgba(17, 24, 39, 0.55);
+  border-right: 1px solid rgba(148, 163, 184, 0.2);
   display: flex; flex-direction: column;
   z-index: 100;
   transition: transform var(--transition);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .sidebar-header { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); }
 .sidebar-header h2 {
@@ -114,12 +114,12 @@ a:hover { color: var(--accent); }
 .hamburger-btn {
   display: none; position: fixed; top: 16px; left: 16px; z-index: 200;
   width: 44px; height: 44px; border-radius: var(--radius-md);
-  background: rgba(30, 41, 59, 0.85); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.3);
   color: var(--text); cursor: pointer;
   align-items: center; justify-content: center;
   box-shadow: var(--shadow-md); transition: background var(--transition);
 }
-.hamburger-btn:hover { background: rgba(37, 51, 73, 0.88); }
+.hamburger-btn:hover { background: rgba(37, 51, 73, 0.6); }
 .hamburger-btn svg { width: 22px; height: 22px; }
 .sidebar-overlay {
   display: none; position: fixed; inset: 0;
@@ -140,7 +140,7 @@ a:hover { color: var(--accent); }
 /* --- Stat Grid & Cards --- */
 .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
 .stat-card {
-  background: rgba(30, 41, 59, 0.82); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); padding: 20px;
   transition: all var(--transition); position: relative; overflow: hidden;
   backdrop-filter: blur(6px);
@@ -174,11 +174,11 @@ a:hover { color: var(--accent); }
 
 /* --- Card --- */
 .card {
-  background: rgba(30, 41, 59, 0.85); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); overflow: hidden;
   transition: border-color var(--transition);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .card:hover { border-color: rgba(20,184,166,.2); }
 .card-header {
@@ -228,13 +228,13 @@ a:hover { color: var(--accent); }
 }
 .form-control {
   width: 100%; padding: 10px 14px;
-  background: rgba(30, 41, 59, 0.85); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-md); color: var(--text);
   font-size: 14px; font-family: inherit;
   transition: all var(--transition); outline: none;
 }
 .form-control:focus {
-  border-color: var(--primary); background: rgba(37, 51, 73, 0.88);
+  border-color: var(--primary); background: rgba(37, 51, 73, 0.55);
   box-shadow: 0 0 0 3px rgba(20,184,166,.15);
 }
 .form-control::placeholder { color: var(--text-light); }
@@ -278,7 +278,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .player-list { display: flex; flex-direction: column; gap: 10px; }
 .player-card {
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(30, 41, 59, 0.82); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); padding: 16px 20px;
   transition: all var(--transition); gap: 12px;
   backdrop-filter: blur(6px);
@@ -300,7 +300,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 
 /* --- Match Card --- */
 .match-card {
-  background: rgba(30, 41, 59, 0.82); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 10px;
   cursor: pointer; transition: all var(--transition);
   backdrop-filter: blur(6px);
@@ -337,7 +337,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .match-detail { max-width: 800px; margin: 0 auto; }
 .match-detail-sides { display: flex; align-items: stretch; gap: 16px; margin-bottom: 24px; }
 .side-card {
-  flex: 1; background: rgba(30, 41, 59, 0.82); border: 1px solid var(--border);
+  flex: 1; background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); padding: 24px; text-align: center;
   transition: all var(--transition);
   backdrop-filter: blur(6px);
@@ -373,7 +373,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .trophy { font-size: 40px; margin-bottom: 8px; }
 .winner-text { font-size: 16px; font-weight: 700; color: var(--warning); }
 .match-detail-notes {
-  background: rgba(30, 41, 59, 0.82); border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 24px;
   font-size: 14px; color: var(--text-secondary);
   backdrop-filter: blur(6px);
@@ -459,7 +459,7 @@ tbody tr:last-child td { border-bottom: none; }
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 36px; height: 36px; padding: 0 10px;
   border-radius: var(--radius-md); border: 1px solid var(--border);
-  background: rgba(30, 41, 59, 0.85); color: var(--text-secondary);
+  background: rgba(30, 41, 59, 0.5); color: var(--text-secondary);
   font-size: 14px; font-weight: 500; cursor: pointer; transition: all var(--transition);
 }
 .pagination button:hover:not(:disabled) {
@@ -544,9 +544,29 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Mobile (<=768px) */
 @media (max-width: 768px) {
-  .sidebar { display: none; }
-  .sidebar-overlay { display: none; }
-  .hamburger-btn { display: none; }
+  /* Enable hamburger + slide-in sidebar on mobile */
+  .sidebar {
+    display: flex;
+    transform: translateX(-100%);
+    box-shadow: none;
+    z-index: 310;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar-overlay {
+    display: block;
+    z-index: 305;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--transition), visibility var(--transition);
+  }
+  .sidebar-overlay.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+  .hamburger-btn { display: flex; }
 
   /* Fix iOS Safari background-attachment:fixed rendering */
   body {
@@ -555,7 +575,7 @@ tbody tr:last-child td { border-bottom: none; }
 
   .main-content {
     margin-left: 0;
-    padding: 20px 16px 80px;
+    padding: 72px 16px 80px;
   }
 
   .page-header h1 { font-size: 22px; }
@@ -609,7 +629,7 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Small Mobile (<=480px) */
 @media (max-width: 480px) {
-  .main-content { padding: 16px 12px 80px; }
+  .main-content { padding: 68px 12px 80px; }
   .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
   .stat-card { padding: 12px; }
   .stat-card-value { font-size: 20px; }
@@ -647,8 +667,8 @@ tbody tr:last-child td { border-bottom: none; }
   right: 0;
   z-index: 300;
   height: 64px;
-  background: rgba(17, 24, 39, 0.90);
-  border-top: 1px solid var(--border);
+  background: rgba(17, 24, 39, 0.65);
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
   padding: 0 8px;
   padding-bottom: env(safe-area-inset-bottom, 0);
   align-items: center;
