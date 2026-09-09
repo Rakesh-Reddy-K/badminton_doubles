@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: badminton_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-badminton}
+      POSTGRES_USER: ${POSTGRES_USER:-badminton}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-badminton_secret}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-badminton} -d ${POSTGRES_DB:-badminton}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - badminton_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: badminton_backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-badminton}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-badminton}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-badminton_secret}
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - badminton_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: badminton_frontend
+    environment:
+      PORT: 80
+      BACKEND_URL: http://backend:8080
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - badminton_network
+
+volumes:
+  postgres_data:
+
+networks:
+  badminton_network:
+    driver: bridge

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Environment
+.env
+*.env.local
+
+# Build
+frontend/dist/
+backend/target/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
