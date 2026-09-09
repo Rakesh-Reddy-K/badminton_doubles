@@ -17,7 +17,7 @@ services:
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false          # ⬅ set in Render Dashboard (your Supabase DB password)
       - key: CORS_ALLOWED_ORIGINS
-        value: https://badminton-frontend-991x.onrender.com
+        value: https://badminton-frontend-c4fa.onrender.com
       - key: JAVA_OPTS
         value: "-Xms256m -Xmx512m"
 
@@ -34,3 +34,5 @@ services:
         value: "10000"
       - key: BACKEND_URL
         value: https://badminton-backend-9a2r.onrender.com
+      - key: BACKEND_HOST
+        value: badminton-backend-9a2r.onrender.com
