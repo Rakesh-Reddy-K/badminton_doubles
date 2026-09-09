@@ -15,6 +15,7 @@ server {
         # Required for Render HTTPS/SNI
         proxy_ssl_server_name on;
         proxy_ssl_name ${BACKEND_HOST};
+        proxy_ssl_verify off;
 
         # Send backend hostname
         proxy_set_header Host ${BACKEND_HOST};
