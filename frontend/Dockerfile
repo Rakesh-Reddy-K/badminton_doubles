@@ -12,13 +12,13 @@ RUN npm run build
 # Production stage
 FROM nginx:alpine
 
-# Install gettext for envsubst (used in entrypoint.sh)
-RUN apk add --no-cache gettext
+# Bake the nginx template into the image. The official nginx entrypoint
+# automatically runs envsubst over /etc/nginx/templates/*.template at startup
+# (substituting ONLY defined env vars like ${PORT}/${BACKEND_URL}, leaving
+# nginx's own $host/$uri/$scheme intact) and writes the result to
+# /etc/nginx/conf.d/.
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf.template /tmp/nginx.conf.template
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
-ENTRYPOINT ["/entrypoint.sh"]
