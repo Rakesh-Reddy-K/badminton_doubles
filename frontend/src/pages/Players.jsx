@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPlayers, createPlayer, updatePlayer, updatePlayerStatus, deletePlayer } from '../api/api';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 function PlayerAvatar({ name }) {
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
@@ -29,27 +30,29 @@ export default function Players() {
   const [editingPlayer, setEditingPlayer] = useState(null);
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   const [error, setError] = useState(null);
+  const [formError, setFormError] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({ open: false, player: null });
 
-  const loadPlayers = () => {
+  const loadPlayers = useCallback(() => {
     setLoading(true);
+    setError(null);
     getPlayers(search || undefined)
       .then(res => setPlayers(res.data))
       .catch(err => setError(err.response?.data?.message || 'Failed to load players'))
       .finally(() => setLoading(false));
-  };
+  }, [search]);
 
-  useEffect(() => { loadPlayers(); }, [search]);
+  useEffect(() => { loadPlayers(); }, [loadPlayers]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(null);
+    setFormError(null);
     const action = editingPlayer
       ? updatePlayer(editingPlayer.id, formData)
       : createPlayer(formData);
     action
       .then(() => { setShowForm(false); setEditingPlayer(null); setFormData({ name: '', phone: '', email: '' }); loadPlayers(); })
-      .catch(err => setError(err.response?.data?.message || 'Failed to save player'));
+      .catch(err => setFormError(err.response?.data?.message || 'Failed to save player'));
   };
 
   const handleEdit = (player) => {
@@ -61,7 +64,7 @@ export default function Players() {
   const handleToggleStatus = (player) => {
     updatePlayerStatus(player.id, !player.active)
       .then(() => loadPlayers())
-      .catch(err => setError(err.response?.data?.message || 'Failed to update status'));
+      .catch(err => setFormError(err.response?.data?.message || 'Failed to update status'));
   };
 
   const handleDelete = () => {
@@ -69,7 +72,7 @@ export default function Players() {
     deletePlayer(confirmDialog.player.id)
       .then(() => { setConfirmDialog({ open: false, player: null }); loadPlayers(); })
       .catch(err => {
-        setError(err.response?.data?.message || 'Failed to delete player');
+        setFormError(err.response?.data?.message || 'Failed to delete player');
         setConfirmDialog({ open: false, player: null });
       });
   };
@@ -86,7 +89,7 @@ export default function Players() {
         </button>
       </div>
 
-      {error && <div className="error-toast">{error}</div>}
+      {formError && <div className="error-toast">{formError}</div>}
 
       {showForm && (
         <div className="dialog-overlay" onClick={() => { setShowForm(false); setEditingPlayer(null); }}>
@@ -118,7 +121,7 @@ export default function Players() {
         <input className="form-control" placeholder="Search players..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      {loading ? <Loading /> : players.length === 0 ? (
+      {loading ? <Loading message="Loading players..." /> : error ? <ErrorState message={error} onRetry={loadPlayers} /> : players.length === 0 ? (
         <div className="empty-state">
           <div className="icon">👥</div>
           <h3>No players found</h3>

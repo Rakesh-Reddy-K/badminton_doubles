@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPlayers, createMatch } from '../api/api';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 export default function CreateMatch() {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState(null);
   const [form, setForm] = useState({
     sideAPlayer1Id: '', sideAPlayer2Id: '',
     sideBPlayer1Id: '', sideBPlayer2Id: '',
@@ -20,7 +22,7 @@ export default function CreateMatch() {
   useEffect(() => {
     getPlayers()
       .then(res => setPlayers(res.data.filter(p => p.active)))
-      .catch(() => setError('Failed to load players'))
+      .catch(err => setError(err.response?.data?.message || 'Failed to load players'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -31,7 +33,7 @@ export default function CreateMatch() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(null);
+    setFormError(null);
     setSaving(true);
     createMatch({
       ...form,
@@ -41,11 +43,12 @@ export default function CreateMatch() {
       playedAt: new Date(form.playedAt).toISOString(),
     })
       .then(res => navigate(`/matches/${res.data.id}`))
-      .catch(err => setError(err.response?.data?.message || 'Failed to create match'))
+      .catch(err => setFormError(err.response?.data?.message || 'Failed to create match'))
       .finally(() => setSaving(false));
   };
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading players..." />;
+  if (error) return <ErrorState message={error} />;
 
   return (
     <div className="match-detail">
@@ -53,7 +56,7 @@ export default function CreateMatch() {
         <h1>Create Match</h1>
         <p>Record a new doubles match</p>
       </div>
-      {error && <div className="error-toast">{error}</div>}
+      {formError && <div className="error-toast">{formError}</div>}
       <div className="card">
         <div className="card-body">
           <form onSubmit={handleSubmit}>

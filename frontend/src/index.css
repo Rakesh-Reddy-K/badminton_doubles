@@ -388,6 +388,24 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   word-break: break-word;
 }
 
+/* --- Error State --- */
+.error-state {
+  text-align: center; padding: 48px 24px; margin-bottom: 24px;
+  background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.error-state-icon { font-size: 48px; margin-bottom: 16px; }
+.error-state h3 {
+  font-size: 18px; font-weight: 700; margin-bottom: 8px;
+  color: var(--text);
+}
+.error-state p {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 4px;
+  max-width: 400px; margin-left: auto; margin-right: auto;
+  line-height: 1.5;
+}
+
 /* --- Empty State --- */
 .empty-state { text-align: center; padding: 48px 24px; color: var(--text-secondary); }
 .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
@@ -670,6 +688,27 @@ tbody tr:last-child td { border-bottom: none; }
 
   /* Player card actions on mobile */
   .player-card-actions { flex-wrap: wrap; }
+
+  /* Error state smaller on mobile */
+  .error-state { padding: 32px 16px; }
+  .error-state-icon { font-size: 36px; }
+  .error-state h3 { font-size: 16px; }
+  .error-state p { font-size: 13px; }
+
+  /* Match detail winner text wrapping */
+  .winner-text { font-size: 14px; }
+  .match-detail-winner { padding: 16px; }
+  .match-detail-notes { font-size: 13px; padding: 12px 16px; }
+
+  /* Match detail sides already column - fine */
+  .side-card-score { font-size: 40px; }
+
+  /* Dashboard grid stacks */
+  .dashboard-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+
+  /* Player ranking table */
+  .table-container table { font-size: 13px; }
+  .table-container th, .table-container td { padding: 8px 10px; }
 }
 
 /* Small Mobile (<=480px) */
@@ -714,6 +753,21 @@ tbody tr:last-child td { border-bottom: none; }
   .empty-state { padding: 32px 16px; }
   .empty-state .icon { font-size: 40px; }
   .empty-state h3 { font-size: 16px; }
+
+  /* Error state tiny screen */
+  .error-state { padding: 24px 12px; }
+  .error-state-icon { font-size: 32px; }
+  .error-state h3 { font-size: 15px; }
+  .error-state p { font-size: 12px; }
+
+  /* Match detail tiny */
+  .side-card-score { font-size: 32px; }
+  .side-card-player { font-size: 14px; }
+  .trophy { font-size: 32px; }
+  .match-detail-vs { font-size: 14px; }
+
+  /* Match card winner tiny */
+  .match-card-winner { font-size: 12px; }
 }
 
 /* ============================================

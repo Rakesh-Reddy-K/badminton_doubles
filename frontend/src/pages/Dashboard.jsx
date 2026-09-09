@@ -1,22 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getDashboard } from '../api/api';
 import MatchCard from '../components/MatchCard';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const loadData = useCallback(() => {
+    setLoading(true);
+    setError(null);
     getDashboard()
       .then(res => setData(res.data))
       .catch(err => setError(err.response?.data?.message || 'Failed to load dashboard'))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <Loading />;
-  if (error) return <div className="error-toast">{error}</div>;
+  useEffect(() => { loadData(); }, [loadData]);
+
+  if (loading) return <Loading message="Loading dashboard..." />;
+  if (error) return <ErrorState message={error} onRetry={loadData} />;
   if (!data) return null;
 
   return (

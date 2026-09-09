@@ -1,19 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getRankings } from '../api/api';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 export default function PlayerRanking() {
   const [rankings, setRankings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [minMatches, setMinMatches] = useState(0);
 
-  useEffect(() => {
+  const loadRankings = useCallback(() => {
     setLoading(true);
+    setError(null);
     getRankings(minMatches)
       .then(res => setRankings(res.data))
-      .catch(() => {})
+      .catch(err => setError(err.response?.data?.message || 'Failed to load rankings'))
       .finally(() => setLoading(false));
   }, [minMatches]);
+
+  useEffect(() => { loadRankings(); }, [loadRankings]);
 
   return (
     <div>
@@ -27,7 +32,7 @@ export default function PlayerRanking() {
         <input type="number" className="form-control" min="0" value={minMatches} onChange={e => setMinMatches(Number(e.target.value))} style={{ maxWidth: 80 }} />
       </div>
 
-      {loading ? <Loading /> : rankings.length === 0 ? (
+      {loading ? <Loading /> : error ? <ErrorState message={error} onRetry={loadRankings} /> : rankings.length === 0 ? (
         <div className="empty-state">
           <div className="icon">🏆</div>
           <h3>No rankings available</h3>

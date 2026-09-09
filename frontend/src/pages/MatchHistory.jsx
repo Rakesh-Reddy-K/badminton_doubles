@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getMatches, getDayStatistics } from '../api/api';
 import MatchCard from '../components/MatchCard';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 import Pagination from '../components/Pagination';
 
 function DayStatsGrid({ dayStats }) {
@@ -37,14 +38,16 @@ function DayStatsGrid({ dayStats }) {
 export default function MatchHistory() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState('newest');
   const [filterDate, setFilterDate] = useState('');
   const [dayStats, setDayStats] = useState(null);
   const size = 10;
 
-  useEffect(() => {
+  const loadMatches = useCallback(() => {
     setLoading(true);
+    setError(null);
     const params = { page, size, sort };
     if (filterDate) {
       params.from = filterDate;
@@ -52,9 +55,11 @@ export default function MatchHistory() {
     }
     getMatches(params)
       .then(res => setData(res.data))
-      .catch(() => {})
+      .catch(err => setError(err.response?.data?.message || 'Failed to load matches'))
       .finally(() => setLoading(false));
   }, [page, sort, filterDate]);
+
+  useEffect(() => { loadMatches(); }, [loadMatches]);
 
   useEffect(() => {
     if (filterDate) {
@@ -65,6 +70,16 @@ export default function MatchHistory() {
       setDayStats(null);
     }
   }, [filterDate]);
+
+  if (error) return (
+    <div>
+      <div className="page-header">
+        <h1>Match History</h1>
+        <p>All recorded matches</p>
+      </div>
+      <ErrorState message={error} onRetry={loadMatches} />
+    </div>
+  );
 
   return (
     <div>

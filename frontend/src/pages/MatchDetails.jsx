@@ -1,29 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMatch, deleteMatch } from '../api/api';
 import { formatDateTime, getPlayerNames } from '../utils/format';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 export default function MatchDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [match, setMatch] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showDelete, setShowDelete] = useState(false);
 
-  useEffect(() => {
+  const loadMatch = useCallback(() => {
+    setLoading(true);
+    setError(null);
     getMatch(id)
       .then(res => setMatch(res.data))
-      .catch(() => navigate('/matches'))
+      .catch(err => setError(err.response?.data?.message || 'Failed to load match'))
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => { loadMatch(); }, [loadMatch]);
 
   const handleDelete = () => {
     deleteMatch(id).then(() => navigate('/matches'));
   };
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading message="Loading match..." />;
+  if (error) return <ErrorState message={error} onRetry={loadMatch} />;
   if (!match) return null;
 
   const isWinnerA = match.winnerSide === 'A';

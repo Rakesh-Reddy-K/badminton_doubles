@@ -1,19 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getPairStats } from '../api/api';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 export default function PairStatistics() {
   const [pairs, setPairs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [minMatches, setMinMatches] = useState(0);
 
-  useEffect(() => {
+  const loadPairs = useCallback(() => {
     setLoading(true);
+    setError(null);
     getPairStats(minMatches)
       .then(res => setPairs(res.data))
-      .catch(() => {})
+      .catch(err => setError(err.response?.data?.message || 'Failed to load pair statistics'))
       .finally(() => setLoading(false));
   }, [minMatches]);
+
+  useEffect(() => { loadPairs(); }, [loadPairs]);
 
   return (
     <div>
@@ -27,7 +32,7 @@ export default function PairStatistics() {
         <input type="number" className="form-control" min="0" value={minMatches} onChange={e => setMinMatches(Number(e.target.value))} style={{ maxWidth: 80 }} />
       </div>
 
-      {loading ? <Loading /> : pairs.length === 0 ? (
+      {loading ? <Loading /> : error ? <ErrorState message={error} onRetry={loadPairs} /> : pairs.length === 0 ? (
         <div className="empty-state">
           <div className="icon">🤝</div>
           <h3>No pair data available</h3>

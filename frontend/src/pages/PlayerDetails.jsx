@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPlayer, getPlayerStat } from '../api/api';
 import { formatDateTime } from '../utils/format';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 export default function PlayerDetails() {
   const { id } = useParams();
@@ -10,15 +11,21 @@ export default function PlayerDetails() {
   const [player, setPlayer] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const loadPlayer = useCallback(() => {
+    setLoading(true);
+    setError(null);
     Promise.all([getPlayer(id), getPlayerStat(id)])
       .then(([pRes, sRes]) => { setPlayer(pRes.data); setStats(sRes.data); })
-      .catch(() => navigate('/players'))
+      .catch(err => setError(err.response?.data?.message || 'Failed to load player details'))
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <Loading />;
+  useEffect(() => { loadPlayer(); }, [loadPlayer]);
+
+  if (loading) return <Loading message="Loading player..." />;
+  if (error) return <ErrorState message={error} onRetry={loadPlayer} />;
   if (!player) return null;
 
   const initials = player.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
