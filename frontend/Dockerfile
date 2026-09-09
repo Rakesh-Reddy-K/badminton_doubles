@@ -17,7 +17,7 @@ RUN apk add --no-cache gettext
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY nginx.conf.template /tmp/nginx.conf.template
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
 COPY entrypoint.sh /entrypoint.sh
 
