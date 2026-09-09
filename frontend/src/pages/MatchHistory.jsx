@@ -82,7 +82,7 @@ export default function MatchHistory() {
           <span className="date-filter-icon">📅</span>
           <input
             type="date"
-            className="form-control"
+            className="form-control date-input"
             value={filterDate}
             onChange={e => { setFilterDate(e.target.value); setPage(0); }}
           />

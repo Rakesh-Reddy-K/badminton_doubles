@@ -283,12 +283,13 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   transition: all var(--transition); gap: 12px;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  overflow: hidden;
 }
 .player-card:hover {
   border-color: rgba(20,184,166,.25);
   transform: translateY(-1px); box-shadow: var(--shadow-md);
 }
-.player-card-info { flex: 1; min-width: 0; }
+.player-card-info { flex: 1; min-width: 0; overflow: hidden; }
 .player-card-info h3 {
   font-size: 15px; font-weight: 700;
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
@@ -296,6 +297,9 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .player-card-info p {
   font-size: 13px; color: var(--text-secondary); margin-top: 2px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.player-card-actions {
+  display: flex; gap: 6px; flex-shrink: 0;
 }
 
 /* --- Match Card --- */
@@ -305,6 +309,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   cursor: pointer; transition: all var(--transition);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  overflow: hidden;
 }
 .match-card:hover {
   border-color: rgba(20,184,166,.3);
@@ -313,11 +318,12 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .match-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .match-card-id { font-weight: 700; font-size: 14px; color: var(--primary-light); }
 .match-card-date { font-size: 13px; color: var(--text-light); }
-.match-card-sides { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.match-card-sides { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; overflow: hidden; }
 .match-side {
   flex: 1; display: flex; justify-content: space-between; align-items: center;
   padding: 10px 14px; border-radius: var(--radius-md);
   background: rgba(255,255,255,.03); border: 1px solid transparent; gap: 8px;
+  min-width: 0; overflow: hidden;
 }
 .match-side.winner { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.2); }
 .match-side.loser { opacity: .7; }
@@ -331,6 +337,7 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .match-card-winner {
   font-size: 13px; color: var(--text-secondary);
   padding-top: 10px; border-top: 1px solid var(--border);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 /* --- Match Detail --- */
@@ -371,13 +378,14 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   border: 1px solid rgba(245,158,11,.2); border-radius: var(--radius-lg); margin-bottom: 24px;
 }
 .trophy { font-size: 40px; margin-bottom: 8px; }
-.winner-text { font-size: 16px; font-weight: 700; color: var(--warning); }
+.winner-text { font-size: 16px; font-weight: 700; color: var(--warning); word-break: break-word; }
 .match-detail-notes {
   background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 24px;
   font-size: 14px; color: var(--text-secondary);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  word-break: break-word;
 }
 
 /* --- Empty State --- */
@@ -411,16 +419,18 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   background: rgba(0,0,0,.6); backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
   animation: fadeIn .2s ease;
+  padding: 16px;
 }
 .dialog {
   background: rgba(30,41,59,.95); backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: var(--radius-xl);
-  padding: 28px; max-width: 420px; width: 90%;
+  padding: 28px; max-width: 480px; width: 100%;
   box-shadow: var(--shadow-lg); animation: slideUp .25s ease;
+  max-height: 90vh; overflow-y: auto;
 }
-.dialog h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.dialog h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
 .dialog p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
-.dialog-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.dialog-actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 8px; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(16px) scale(.97); }
@@ -488,6 +498,15 @@ tbody tr:last-child td { border-bottom: none; }
 .date-clear-btn {
   flex-shrink: 0;
 }
+
+/* Date input: constrain the native picker dropdown on mobile */
+.date-input {
+  max-width: 180px;
+  min-width: 0;
+}
+/* Card header overflow handling */
+.card-header { overflow: hidden; }
+.card-header span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* --- Day Dashboard (Match History with date selected) --- */
 .day-dashboard-header {
@@ -579,16 +598,20 @@ tbody tr:last-child td { border-bottom: none; }
   }
 
   .page-header h1 { font-size: 22px; }
+  .page-header p { font-size: 13px; }
   .page-header { margin-bottom: 16px; }
   .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .stat-card { padding: 14px; }
+  .stat-card { padding: 14px; overflow: hidden; }
   .stat-card-value { font-size: 24px; }
+  .stat-card-value-lg { font-size: 15px; }
+  .stat-card-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* Dashboard grid stacks */
   .dashboard-grid { grid-template-columns: 1fr !important; }
 
   .match-detail-sides { flex-direction: column; }
   .match-detail-vs { justify-content: center; padding: 8px 0; }
+  .side-card-player { word-break: break-word; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
 
   /* Player card: stack actions below info */
@@ -597,7 +620,7 @@ tbody tr:last-child td { border-bottom: none; }
     align-items: stretch;
     gap: 12px;
   }
-  .player-card > div:last-child {
+  .player-card-actions {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 6px;
@@ -618,13 +641,35 @@ tbody tr:last-child td { border-bottom: none; }
   .match-detail-actions .btn { width: 100%; }
 
   /* Toolbar wraps */
-  .toolbar { flex-wrap: wrap; }
+  .toolbar { flex-wrap: wrap; gap: 10px; }
+  .toolbar .form-control { min-width: 0; }
+  .toolbar select.form-control { min-width: 120px; }
 
   /* Player ranking table scrollable */
   .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   /* Pair statistics grid */
   .pair-stat-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+
+  /* Match card sides wrap on mobile */
+  .match-card-sides { flex-direction: column; gap: 8px; }
+  .match-vs { padding: 2px 0; }
+
+  /* Match card winner truncation */
+  .match-card-winner { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Date filter group stacks on mobile */
+  .date-filter-group { width: 100%; flex-wrap: nowrap; gap: 6px; }
+  .date-filter-group .date-input { flex: 1; max-width: none; }
+  .date-filter-group .form-control { flex: 1; max-width: none; }
+  .date-filter-icon { display: none; }
+
+  /* Dialog form controls wider on mobile */
+  .dialog .dialog-actions { flex-direction: row-reverse; justify-content: stretch; gap: 8px; }
+  .dialog .dialog-actions .btn { flex: 1; }
+
+  /* Player card actions on mobile */
+  .player-card-actions { flex-wrap: wrap; }
 }
 
 /* Small Mobile (<=480px) */
@@ -644,16 +689,31 @@ tbody tr:last-child td { border-bottom: none; }
   .dialog { padding: 20px; margin: 12px; }
   .toolbar { gap: 8px; }
   .day-dashboard-body { grid-template-columns: 1fr; gap: 16px; }
-  .date-filter-group { width: 100%; }
-  .date-filter-group .form-control { flex: 1; max-width: none; }
   .day-filter-banner { flex-direction: column; gap: 4px; text-align: center; }
 
   /* Smaller FAB on tiny screens */
   .bottom-nav-fab { width: 48px; height: 48px; font-size: 22px; }
 
-  /* Player card buttons stack */
-  .player-card > div:last-child { flex-direction: column; }
-  .player-card > div:last-child .btn { width: 100%; }
+  /* Player card buttons stack on small screens */
+  .player-card-actions { flex-direction: column; }
+  .player-card-actions .btn { width: 100%; }
+
+  /* Dialog tighter on very small screens */
+  .dialog { padding: 20px; margin: 8px; max-height: 85vh; }
+  .dialog h3 { font-size: 16px; }
+
+  /* Match card tighter padding */
+  .match-side { padding: 8px 10px; gap: 6px; }
+  .match-side-players { font-size: 13px; }
+  .match-side-score { font-size: 16px; }
+
+  /* Pagination compact on small screens */
+  .pagination button { min-width: 32px; height: 32px; font-size: 13px; padding: 0 8px; }
+
+  /* Empty state smaller on tiny screens */
+  .empty-state { padding: 32px 16px; }
+  .empty-state .icon { font-size: 40px; }
+  .empty-state h3 { font-size: 16px; }
 }
 
 /* ============================================

@@ -81,37 +81,33 @@ export default function Players() {
           <h1>Players</h1>
           <p>Manage your team roster</p>
         </div>
-        <button className="btn btn-primary" onClick={() => { setEditingPlayer(null); setFormData({ name: '', phone: '', email: '' }); setShowForm(!showForm); }}>
-          {showForm ? '✕ Cancel' : '+ Add Player'}
+        <button className="btn btn-primary" onClick={() => { setEditingPlayer(null); setFormData({ name: '', phone: '', email: '' }); setShowForm(true); }}>
+          + Add Player
         </button>
       </div>
 
       {error && <div className="error-toast">{error}</div>}
 
       {showForm && (
-        <div className="card" style={{ marginBottom: '24px' }}>
-          <div className="card-header">
-            <span>{editingPlayer ? '✏️ Edit Player' : '➕ Add New Player'}</span>
-          </div>
-          <div className="card-body">
+        <div className="dialog-overlay" onClick={() => { setShowForm(false); setEditingPlayer(null); }}>
+          <div className="dialog" onClick={e => e.stopPropagation()}>
+            <h3>{editingPlayer ? '✏️ Edit Player' : '➕ Add New Player'}</h3>
             <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Name *</label>
-                  <input className="form-control" placeholder="Enter player name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required maxLength={100} />
-                </div>
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input className="form-control" placeholder="Enter phone number" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} maxLength={20} />
-                </div>
+              <div className="form-group">
+                <label>Name *</label>
+                <input className="form-control" placeholder="Enter player name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required maxLength={100} />
+              </div>
+              <div className="form-group">
+                <label>Phone</label>
+                <input className="form-control" placeholder="Enter phone number" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} maxLength={20} />
               </div>
               <div className="form-group">
                 <label>Email</label>
                 <input className="form-control" type="email" placeholder="Enter email address" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} maxLength={255} />
               </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button type="submit" className="btn btn-success">{editingPlayer ? '✓ Update' : '✓ Save'} Player</button>
+              <div className="dialog-actions">
                 <button type="button" className="btn btn-outline" onClick={() => { setShowForm(false); setEditingPlayer(null); }}>Cancel</button>
+                <button type="submit" className="btn btn-success">{editingPlayer ? '✓ Update' : '✓ Save'} Player</button>
               </div>
             </form>
           </div>
@@ -139,10 +135,10 @@ export default function Players() {
                   <p>{p.phone || 'No phone'} {p.email ? `• ${p.email}` : ''}</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '6px' }}>
-                <button className="btn btn-sm btn-outline" onClick={() => handleEdit(p)}>✏️ Edit</button>
-                <button className="btn btn-sm btn-outline" onClick={() => handleToggleStatus(p)}>{p.active ? '🔴 Deactivate' : '🟢 Activate'}</button>
-                <button className="btn btn-sm btn-danger" onClick={() => setConfirmDialog({ open: true, player: p })}>🗑️</button>
+              <div className="player-card-actions">
+                <button className="btn btn-sm btn-outline" onClick={(e) => { e.stopPropagation(); handleEdit(p); }}>✏️ Edit</button>
+                <button className="btn btn-sm btn-outline" onClick={(e) => { e.stopPropagation(); handleToggleStatus(p); }}>{p.active ? '🔴 Deactivate' : '🟢 Activate'}</button>
+                <button className="btn btn-sm btn-danger" onClick={(e) => { e.stopPropagation(); setConfirmDialog({ open: true, player: p }); }}>🗑️</button>
               </div>
             </div>
           ))}
@@ -159,3 +155,4 @@ export default function Players() {
     </div>
   );
 }
+
